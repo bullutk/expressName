@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var request = require('request');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -7,8 +8,15 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/nameDisplay',(req, res, next)=>{
-	res.render('nameDisplay', {name: req.body.nameSearch})
-	console.log(req.body.nameSearch);
+	var URL = "http://wasjustthinking.com/class.php"
+	request.get(URL, (error, response, classArray)=>{
+		classArray = JSON.parse(classArray);
+		console.log(classArray)
+		res.render('nameDisplay', {
+			classArray: classArray,
+			name: req.body.nameSearch
+		})
+	})
 })
 
 module.exports = router;
